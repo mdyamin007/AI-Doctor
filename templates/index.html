@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Doctor | A Disease Prediction System</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}" />
+</head>
+
+<body>
+    <h1>AI Doctor</h1>
+    <div class="symptoms-form">
+        <form action="/" method="POST">
+            <label for="symptom-1">Symptom 1: </label>
+            <select id="symptom-1" name="symptom-1">
+                {% for symptom in symptoms %}
+                <option value="{{symptom}}" selected>{{symptom}}</option>
+                {% endfor %}
+            </select>
+            <br />
+
+            <label for="symptom-2">Symptom 2: </label>
+            <select id="symptom-2" name="symptom-2">
+                {% for symptom in symptoms %}
+                <option value="{{symptom}}" selected>{{symptom}}</option>
+                {% endfor %}
+            </select>
+            <br />
+
+            <label for="symptom-3">Symptom 3: </label>
+            <select id="symptom-3" name="symptom-3">
+                {% for symptom in symptoms %}
+                <option value="{{symptom}}" selected>{{symptom}}</option>
+                {% endfor %}
+            </select>
+            <br />
+
+            <label for="symptom-4">Symptom 4: </label>
+            <select id="symptom-4" name="symptom-4">
+                {% for symptom in symptoms %}
+                <option value="{{symptom}}" selected>{{symptom}}</option>
+                {% endfor %}
+            </select>
+            <br />
+
+            <label for="symptom-5">Symptom 5: </label>
+            <select id="symptom-5" name="symptom-5">
+                {% for symptom in symptoms %}
+                <option value="{{symptom}}" selected>{{symptom}}</option>
+                {% endfor %}
+            </select>
+            <br />
+
+            <input type="submit" value="Predict!" />
+
+        </form>
+    </div>
+
+    <br /> <br />
+    {{ prediction }}
+</body>
+
+</html>

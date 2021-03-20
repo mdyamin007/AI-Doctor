@@ -6,4 +6,4 @@ A Healthcare or Disease prediction system using Machine Learning.
 
 To be added
 
-**Demo:** [AI Doctor](aidoctor.herokuapp.com)
+**Demo:** [AI Doctor](https://aidoctor.herokuapp.com)

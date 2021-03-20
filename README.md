@@ -1,8 +1,8 @@
-#AI Doctor
+# AI Doctor
 
 A Healthcare or Disease prediction system using Machine Learning.
 
-##Description
+## Description
 
 To be added
 

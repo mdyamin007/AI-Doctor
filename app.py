@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request, jsonify
+from flask_cors import CORS, cross_origin
 import pandas as pd
 import numpy as np
 import pickle
@@ -28,6 +29,7 @@ def home():
         return render_template('index.html', symptoms=symptoms)
 
 @app.route('/webhook', methods=['POST'])
+@cross_origin()
 def webhook():
     req = request.get_json(silent=True, force=True)
     req = ProcessRequest(req)
@@ -47,7 +49,21 @@ def ProcessRequest(req):
             'name' : name,
             'age' : age
         })
+        
+        webhookresponse = 'Hey {}, what symptoms do you have? please enter one of your symptoms.(Ex. headeache, vomiting etc.)'.format(name)
 
+        return {
+            "fulfillmentMessages": [
+                {
+                    "text": {
+                        "text": [
+                            webhookresponse
+                        ]
+
+                    }
+                }
+            ]
+        }
 
 
 if __name__ == '__main__':

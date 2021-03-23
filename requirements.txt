@@ -1,6 +1,8 @@
 astroid==2.5.1
 click==7.1.2
+dnspython==2.1.0
 Flask==1.1.2
+Flask-Cors==3.0.10
 gunicorn==20.0.4
 isort==5.7.0
 itsdangerous==1.1.0

@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, jsonify
 import pandas as pd
 import numpy as np
 import pickle
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
@@ -25,6 +26,29 @@ def home():
 
     else:
         return render_template('index.html', symptoms=symptoms)
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json(silent=True, force=True)
+    req = ProcessRequest(req)
+
+
+def ProcessRequest(req):
+    cluster = MongoClient("mongodb+srv://mdyamin:yamin787898@cluster0.5bduk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    db = cluster['aidoctor']
+    collection = db['user_symptoms']
+    result = req.get('queryResult')
+    intent = result.get('intent').get('displayName')
+
+    if intent == 'get_info':
+        name = result.get('parameters').get('any')
+        age = result.get('parameters').get('number')
+        collection.insert_one({
+            'name' : name,
+            'age' : age
+        })
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,9 +1,10 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
 import pandas as pd
 import numpy as np
 import pickle
 from pymongo import MongoClient
+import json
 
 app = Flask(__name__)
 
@@ -32,7 +33,13 @@ def home():
 @cross_origin()
 def webhook():
     req = request.get_json(silent=True, force=True)
-    req = ProcessRequest(req)
+    res = ProcessRequest(req)
+    res = json.dumps(res, indent=4)
+    print(res)
+    response = make_response(res)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+    
 
 
 def ProcessRequest(req):

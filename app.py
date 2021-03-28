@@ -5,6 +5,10 @@ import numpy as np
 import pickle
 from pymongo import MongoClient
 import json
+import os
+from dialogflow_v2.types import TextInput, QueryInput
+from dialogflow_v2 import SessionsClient
+from google.api_core.exceptions import InvalidArgument
 
 app = Flask(__name__)
 
@@ -16,20 +20,22 @@ model = pickle.load(open('model.pkl', 'rb'))
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
-    if request.method == 'POST':
-        user_symptoms = [request.form['symptom-1'], request.form['symptom-2'],
-                         request.form['symptom-3'], request.form['symptom-4'], request.form['symptom-5']]
-        y = []
-        for i in range(len(symptoms)):
-            y.append(0)
-        for i in range(5):
-            y[symptoms.index(user_symptoms[i])] = 1
-        prediction = model.predict([np.array(y)])
-        ans = prediction[0]
-        return render_template('index.html', symptoms=symptoms, prediction="You have {}".format(ans))
+    # if request.method == 'POST':
+    #     user_symptoms = [request.form['symptom-1'], request.form['symptom-2'],
+    #                      request.form['symptom-3'], request.form['symptom-4'], request.form['symptom-5']]
+    #     y = []
+    #     for i in range(len(symptoms)):
+    #         y.append(0)
+    #     for i in range(5):
+    #         y[symptoms.index(user_symptoms[i])] = 1
+    #     prediction = model.predict([np.array(y)])
+    #     ans = prediction[0]
+    #     return render_template('index.html', symptoms=symptoms, prediction="You have {}".format(ans))
 
-    else:
-        return render_template('index.html', symptoms=symptoms)
+    # else:
+    #     return render_template('index.html', symptoms=symptoms)
+    return render_template('bot.html')
+
 
 
 @app.route('/webhook', methods=['POST'])
@@ -127,7 +133,48 @@ def ProcessRequest(req):
             ]
         }
 
-        
+
+@app.route('/chatapi', methods=['POST'])
+@cross_origin()
+def chat_response():
+    req = request.get_json(force=True)
+    msg = req.get('MSG')
+    res = DialogflowInteraction(msg)
+    response = make_response(res)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+def DialogflowInteraction(userText):
+
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'private_key.json'
+    DIALOGFLOW_PROJECT_ID = 'ai-doctor-ebfe'
+    DIALOGFLOW_LANGUAGE_CODE = 'en'
+    SESSION_ID = 'me'
+
+    text_to_be_analyzed = userText
+
+    session_client = SessionsClient()
+    session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
+    text_input = TextInput(text=text_to_be_analyzed, language_code=DIALOGFLOW_LANGUAGE_CODE)
+    query_input = QueryInput(text=text_input)
+    try:
+        response = session_client.detect_intent(session=session, query_input=query_input)
+    except InvalidArgument:
+        raise
+
+    botText = response.query_result.fulfillment_text
+    intent = response.query_result.intent.display_name
+    
+    if intent == 'get_info' or intent == 'get_symptom' or intent == 'get_symptom - no':
+        return {
+            'Reply' : response.query_result.fulfillment_messages[0].text.text[0]
+        }
+
+    else :
+        return {
+        'Reply' : botText   
+        }
 
 if __name__ == '__main__':
     app.run(debug=True)

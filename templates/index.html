@@ -1,65 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Doctor | A Disease Prediction System</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}" />
-</head>
+{% block head %}
+<title>AI Doctor | Your Virtual Doctor</title>
+{% endblock %}
 
-<body>
-    <h1>AI Doctor</h1>
-    <div class="symptoms-form">
-        <form action="/" method="POST">
-            <label for="symptom-1">Symptom 1: </label>
-            <select id="symptom-1" name="symptom-1">
-                {% for symptom in symptoms %}
-                <option value="{{symptom}}" selected>{{symptom}}</option>
-                {% endfor %}
-            </select>
-            <br />
-
-            <label for="symptom-2">Symptom 2: </label>
-            <select id="symptom-2" name="symptom-2">
-                {% for symptom in symptoms %}
-                <option value="{{symptom}}" selected>{{symptom}}</option>
-                {% endfor %}
-            </select>
-            <br />
-
-            <label for="symptom-3">Symptom 3: </label>
-            <select id="symptom-3" name="symptom-3">
-                {% for symptom in symptoms %}
-                <option value="{{symptom}}" selected>{{symptom}}</option>
-                {% endfor %}
-            </select>
-            <br />
-
-            <label for="symptom-4">Symptom 4: </label>
-            <select id="symptom-4" name="symptom-4">
-                {% for symptom in symptoms %}
-                <option value="{{symptom}}" selected>{{symptom}}</option>
-                {% endfor %}
-            </select>
-            <br />
-
-            <label for="symptom-5">Symptom 5: </label>
-            <select id="symptom-5" name="symptom-5">
-                {% for symptom in symptoms %}
-                <option value="{{symptom}}" selected>{{symptom}}</option>
-                {% endfor %}
-            </select>
-            <br />
-
-            <input type="submit" value="Predict!" />
-
-        </form>
+{% block content %}
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="2000">
+            <img src="{{ url_for('static', filename='img/slide1.jpg') }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="display-6 text-dark">Could a robot replace your doctor in the near future? </h5>
+                <p class="lead text-dark">The contribution of modern robotics in healthcare is undisputed</p>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="2000">
+            <img src="{{ url_for('static', filename='img/slide2.jpg') }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="display-6 text-dark">Robots are assisting healthcare professionals in a variety of tasks</h5>
+                <p class="lead text-dark">ranging from performing surgical procedures to delivering drugs, and even facilitating their interaction with patients</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='img/slide3.jpg') }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="display-6 text-light">Chat with a Doctor</h5>
+                <p class="lead text-white">You can chat with a doctor anywhere & anytime you want</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
 
-    <br /> <br />
-    {{ prediction }}
-</body>
-
-</html>
+{% endblock %}

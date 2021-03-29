@@ -18,23 +18,9 @@ symptoms = list(test_data.columns)
 model = pickle.load(open('model.pkl', 'rb'))
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/')
 def home():
-    # if request.method == 'POST':
-    #     user_symptoms = [request.form['symptom-1'], request.form['symptom-2'],
-    #                      request.form['symptom-3'], request.form['symptom-4'], request.form['symptom-5']]
-    #     y = []
-    #     for i in range(len(symptoms)):
-    #         y.append(0)
-    #     for i in range(5):
-    #         y[symptoms.index(user_symptoms[i])] = 1
-    #     prediction = model.predict([np.array(y)])
-    #     ans = prediction[0]
-    #     return render_template('index.html', symptoms=symptoms, prediction="You have {}".format(ans))
-
-    # else:
-    #     return render_template('index.html', symptoms=symptoms)
-    return render_template('bot.html')
+    return render_template('index.html')
 
 
 
@@ -175,6 +161,12 @@ def DialogflowInteraction(userText):
         return {
         'Reply' : botText   
         }
+
+
+@app.route('/bot')
+def chat_bot():
+    return render_template('bot.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

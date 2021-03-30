@@ -2,6 +2,19 @@
 
 {% block head %}
 <title>AI Doctor | Your Virtual Doctor</title>
+<style>
+    .example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-top-width: medium;
+        border-right-width: medium;
+        border-bottom-width: medium;
+        border-left-width: medium;
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -13,18 +26,19 @@
         <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="2000">
+        <div class="carousel-item active" data-bs-interval="5000">
             <img src="{{ url_for('static', filename='img/slide1.jpg') }}" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5 class="display-6 text-dark">Could a robot replace your doctor in the near future? </h5>
                 <p class="lead text-dark">The contribution of modern robotics in healthcare is undisputed</p>
             </div>
         </div>
-        <div class="carousel-item" data-bs-interval="2000">
+        <div class="carousel-item" data-bs-interval="5000">
             <img src="{{ url_for('static', filename='img/slide2.jpg') }}" class="d-block w-100" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5 class="display-6 text-dark">Robots are assisting healthcare professionals in a variety of tasks</h5>
-                <p class="lead text-dark">ranging from performing surgical procedures to delivering drugs, and even facilitating their interaction with patients</p>
+                <p class="lead text-dark">ranging from performing surgical procedures to delivering drugs, and even
+                    facilitating their interaction with patients</p>
             </div>
         </div>
         <div class="carousel-item">
@@ -44,5 +58,53 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
+<!-- <div class="example-divider"></div> -->
+
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+            <img src="{{ url_for('static', filename='img/card1.jpg') }}" class="d-block mx-lg-auto img-fluid" alt=""
+                loading="lazy" width="700" height="500">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">Doctor Support using Artificial Intelligence </h1>
+            <p class="lead">Artificial Intelligence and Machine Learning are playing a great role in Medical Science. We
+                provide such kind of services. To learn more please visit</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a href="services"><button type="button"
+                        class="btn btn-primary btn-lg px-4 me-md-2">Services</button></a>
+                <!-- <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="example-divider"></div>
+
+<div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+        <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+            <h1 class="display-4 fw-bold lh-1">What we provide to you</h1>
+            <p class="lead">We provide you two things namely AI Doctor & Online Doctor Support. AI Doctor is a Machine
+                Learning application which is a Disease Prediction System using your given symptoms. We also provide
+                online human doctor support. To learn more visit</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                <a href="services"><button type="button"
+                        class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Services</button></a>
+                <!-- <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button> -->
+            </div>
+        </div>
+        <div class="col-lg-4 offset-lg-1 p-0 position-relative overflow-hidden shadow-lg">
+            <div class="position-lg-absolute top-0 left-0 overflow-hidden">
+                <img class="d-block rounded-lg-3" src="{{ url_for('static', filename='img/card2.png')}}" alt=""
+                    width="720">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="example-divider"></div>
+
 
 {% endblock %}

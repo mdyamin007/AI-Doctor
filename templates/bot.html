@@ -22,11 +22,17 @@
     integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/stethoscope.png') }}" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+
 </head>
 
-<body>
+<body class="bg-dark">
 
-  <div class="chat">
+  <h1 class="text-center text-white fw-bold mt-2" style="font-family: 'Audiowide', cursive;">AI Doctor</h1>
+
+  <div class="chat my-2 mx-4">
     <div class="chat-title">
       <h1>AI Doctor</h1>
       <h2>Your Virtual Doctor</h2>
@@ -48,19 +54,26 @@
   </div>
   <!-- <div class="bg"></div> -->
 
-  <div class="wrapper">
-    <h4>Symptoms</h3> <br/>
-    <div class="search-input">
-      <a href="" target="_blank" hidden></a>
-      <input type="text" placeholder="Type to search..">
-      <div class="autocom-box">
-        <!-- here list are inserted from javascript -->
+  <!-- Search Bar -->
+  <!-- <div class="container ml-5 pl-5 bg-warning"> -->
+  <div class="bg-warning p-4 rounded-3 wrapper">
+    <h6 class="display-6 text-white fw-bold d-inline-block" style="float: left;">Symptoms</h6><h6><span class="badge bg-secondary d-inline-block">বাংলা</span></h6> <br />
+      <div class="search-input mt-3">
+        <!-- <a href="" target="_blank" hidden></a> -->
+        <input type="text" placeholder="Type to search..">
+        <div class="autocom-box">
+          <!-- here list are inserted from javascript -->
+        </div>
+        <div class="icon"><i class="fas fa-search"></i></div>
       </div>
-      <div class="icon"><i class="fas fa-search"></i></div>
-    </div>
   </div>
+  <!-- </div> -->
 
-  <!-- <script src="js/suggestions.js"></script> -->
+  
+    <div class="alert alert-info my-5" style="margin-left: 60%; max-width: 450px; display: none;" id="box">Lorem ipsum</div>
+  
+
+  <!-- <script src="js/symptoms.js"></script> -->
 
 
 
@@ -82,8 +95,8 @@
     -->
 
   <script src="{{ url_for('static', filename='js/bot.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/suggestions.js') }}"></script>
-
+  <script src="{{ url_for('static', filename='js/symptoms.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/symptomps_translations.js') }}"></script>
 
 
 </body>

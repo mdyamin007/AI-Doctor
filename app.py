@@ -9,6 +9,9 @@ import os
 from dialogflow_v2.types import TextInput, QueryInput
 from dialogflow_v2 import SessionsClient
 from google.api_core.exceptions import InvalidArgument
+import requests
+import urllib
+
 
 app = Flask(__name__)
 
@@ -21,7 +24,6 @@ model = pickle.load(open('model.pkl', 'rb'))
 @app.route('/')
 def home():
     return render_template('index.html')
-
 
 
 @app.route('/webhook', methods=['POST'])
@@ -74,10 +76,9 @@ def ProcessRequest(req):
         symptom = result.get('parameters').get('symptom')
 
         document = collection.find_one_and_update(
-            {'name': name}, 
-            { '$push': { 'symptoms': symptom}}
+            {'name': name},
+            {'$push': {'symptoms': symptom}}
         )
-
 
         webhookresponse = "Enter one more symptom beside {}. (Enter 'No' if not)".format(
             symptom)
@@ -104,7 +105,7 @@ def ProcessRequest(req):
             y[symptoms.index(user_symptoms[i])] = 1
         disease = model.predict([np.array(y)])
         disease = disease[0]
-             
+
         webhookresponse = f"Hey {name}. You may have {disease}."
 
         return {
@@ -142,30 +143,74 @@ def DialogflowInteraction(userText):
 
     session_client = SessionsClient()
     session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
-    text_input = TextInput(text=text_to_be_analyzed, language_code=DIALOGFLOW_LANGUAGE_CODE)
+    text_input = TextInput(text=text_to_be_analyzed,
+                           language_code=DIALOGFLOW_LANGUAGE_CODE)
     query_input = QueryInput(text=text_input)
     try:
-        response = session_client.detect_intent(session=session, query_input=query_input)
+        response = session_client.detect_intent(
+            session=session, query_input=query_input)
     except InvalidArgument:
         raise
 
     botText = response.query_result.fulfillment_text
     intent = response.query_result.intent.display_name
-    
+
     if intent == 'get_info' or intent == 'get_symptom' or intent == 'get_symptom - no':
         return {
-            'Reply' : response.query_result.fulfillment_messages[0].text.text[0]
+            'Reply': response.query_result.fulfillment_messages[0].text.text[0]
         }
 
-    else :
+    else:
         return {
-        'Reply' : botText   
+            'Reply': botText
         }
 
 
 @app.route('/bot')
+@cross_origin()
 def chat_bot():
     return render_template('bot.html')
+
+
+@app.route('/translate', methods=['POST'])
+@cross_origin()
+def translate_text():
+    req = request.get_json(force=True)
+    text = req.get('text')
+    source = req.get('source')
+    target = req.get('target')
+    res = translate_api(text,source,target)
+    response = make_response(res)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+def translate_api(text, source, target):
+
+    payload = urllib.parse.urlencode({
+        'q': text,
+        'source': source,
+        'target': target
+    })
+    
+    url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
+
+    headers = {
+        'content-type': "application/x-www-form-urlencoded",
+        'accept-encoding': "application/gzip",
+        'x-rapidapi-key': "1203dfb8f1msh798bedea41b1d8bp1b4a32jsn9015f6fb4a87",
+        'x-rapidapi-host': "google-translate1.p.rapidapi.com"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+
+    result = json.loads(response.text)
+
+    result = result.get('data').get('translations', [])[0].get('translatedText')
+
+    return {
+        'translation': result
+    }
 
 
 if __name__ == '__main__':

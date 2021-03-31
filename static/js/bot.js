@@ -34,10 +34,10 @@ function listendom(no) {
 
 $(window).load(function () {
   $messages.mCustomScrollbar();
+  var welcomeMessage = "This is AI Doctor.";
   setTimeout(function () {
-    serverMessage("This is AI Doctor.");
+    serverMessage(welcomeMessage);
   }, 100);
-
 });
 
 function updateScrollbar() {
@@ -99,7 +99,7 @@ function fetchmsg() {
   console.log("abc", data);
   fetch(url, {
     method: 'POST',
-    body: JSON.stringify({'MSG': data})
+    body: JSON.stringify({ 'MSG': data })
   }).then(res => res.json())
     .then(response => {
       console.log(response);
@@ -122,54 +122,59 @@ let linkTag = searchWrapper.querySelector("a");
 let webLink;
 
 // if user press any key and release
-inputBox.onkeyup = (e)=>{
-    let userData = e.target.value; //user enetered data
-    let emptyArray = [];
-    if(userData){
-        icon.onclick = ()=>{
-            webLink = "https://www.google.com/search?q=" + userData;
-            linkTag.setAttribute("href", webLink);
-            console.log(webLink);
-            linkTag.click();
-        }
-        emptyArray = suggestions.filter((data)=>{
-            //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
-            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase()); 
-        });
-        emptyArray = emptyArray.map((data)=>{
-            // passing return data inside li tag
-            return data = '<li>'+ data +'</li>';
-        });
-        searchWrapper.classList.add("active"); //show autocomplete box
-        showSuggestions(emptyArray);
-        let allList = suggBox.querySelectorAll("li");
-        for (let i = 0; i < allList.length; i++) {
-            //adding onclick attribute in all li tag
-            allList[i].setAttribute("onclick", "select(this)");
-        }
-    }else{
-        searchWrapper.classList.remove("active"); //hide autocomplete box
+inputBox.onkeyup = (e) => {
+  let userData = e.target.value; //user enetered data
+  let emptyArray = [];
+  if (userData) {
+    icon.onclick = () => {
+      result = details[userData];
+      console.log(result);
+      var box = document.getElementById("box");
+      box.textContent = result == null ? "Not found!" : result;
+      box.style.display = "block";
+      // linkTag.click();
     }
+    emptyArray = suggestions.filter((data) => {
+      //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
+      return data.toLocaleLowerCase().search(userData.toLocaleLowerCase()) != -1;
+    });
+    emptyArray = emptyArray.map((data) => {
+      // passing return data inside li tag
+      return data = '<li>' + data + '</li>';
+    });
+    searchWrapper.classList.add("active"); //show autocomplete box
+    showSuggestions(emptyArray);
+    let allList = suggBox.querySelectorAll("li");
+    for (let i = 0; i < allList.length; i++) {
+      //adding onclick attribute in all li tag
+      allList[i].setAttribute("onclick", "select(this)");
+    }
+  } else {
+    searchWrapper.classList.remove("active"); //hide autocomplete box
+  }
 }
 
-function select(element){
-    let selectData = element.textContent;
-    inputBox.value = selectData;
-    icon.onclick = ()=>{
-        webLink = "https://www.google.com/search?q=" + selectData;
-        linkTag.setAttribute("href", webLink);
-        linkTag.click();
-    }
-    searchWrapper.classList.remove("active");
+function select(element) {
+  let selectData = element.textContent;
+  inputBox.value = selectData;
+  icon.onclick = () => {
+    result = details[selectData];
+    console.log(result);
+    var box = document.getElementById("box");
+    box.textContent = result == null ? "Not found!" : result;
+    box.style.display = "block";
+    // linkTag.click();
+  }
+  searchWrapper.classList.remove("active");
 }
 
-function showSuggestions(list){
-    let listData;
-    if(!list.length){
-        userValue = inputBox.value;
-        listData = '<li>'+ userValue +'</li>';
-    }else{
-        listData = list.join('');
-    }
-    suggBox.innerHTML = listData;
+function showSuggestions(list) {
+  let listData;
+  if (!list.length) {
+    userValue = inputBox.value;
+    listData = '<li>' + userValue + '</li>';
+  } else {
+    listData = list.join('');
+  }
+  suggBox.innerHTML = listData;
 }

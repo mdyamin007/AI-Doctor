@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>AI Doctor | Your Virtual Doctor</title>
+{% endblock %}
+
+{% block content %}
+
+<!-- About Us -->
+
+<div class="container my-5">
+
+    <div class="container marketing">
+
+        <!-- Three columns of text below the carousel -->
+        <div class="row">
+            <div class="col-lg-4">
+                <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
+                    xmlns="https://mdyamin.me/portfolio/images/yamin-01.jpg" role="img" aria-label="Placeholder: 140x140"
+                    preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777"
+                        dy=".3em">140x140</text>
+                </svg> -->
+                <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="{{ url_for('static', filename='img/yamin.jpg')}}">
+                <h2>Md Yamin</h2>
+                <p>CSE, Dhaka University of Engineering & Technology(DUET), Gazipur-1707</p>
+                <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            </div><!-- /.col-lg-4 -->
+            <div class="col-lg-4">
+                <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
+                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
+                    preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777"
+                        dy=".3em">140x140</text>
+                </svg> -->
+
+                <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="{{ url_for('static', filename='img/nishat.jpg')}}">
+
+                <h2>Nishat Airin</h2>
+                <p>CSE, Dhaka University of Engineering & Technology(DUET), Gazipur-1707</p>
+                <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            </div><!-- /.col-lg-4 -->
+            <div class="col-lg-4">
+                <!-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
+                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
+                    preserveAspectRatio="xMidYMid slice" focusable="false">
+                    <title>Placeholder</title>
+                    <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777"
+                        dy=".3em">140x140</text>
+                </svg> -->
+                
+                <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="{{ url_for('static', filename='img/falguni.jpg')}}">
+
+
+                <h2>Falguni Islam</h2>
+                <p>CSE, Dhaka University of Engineering & Technology(DUET), Gazipur-1707</p>
+                <p><a class="btn btn-secondary" href="#">View details »</a></p>
+            </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+
+    </div>
+
+
+
+    <!-- Message Form -->
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="mb-1">
+                <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+            </div>
+            <div class="mb-1">
+                <label for="exampleFormControlTextarea1" class="form-label">Message</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <button type="button" class="btn btn-primary my-3">Send</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    {% endblock %}

@@ -19,7 +19,9 @@ test_data = pd.read_csv('Testing.csv', sep=',')
 test_data = test_data.drop('prognosis', axis=1)
 symptoms = list(test_data.columns)
 model = pickle.load(open('model.pkl', 'rb'))
-
+cluster = MongoClient(
+        "mongodb+srv://mdyamin:yamin787898@cluster0.5bduk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db = cluster['aidoctor']
 
 @app.route('/')
 def home():
@@ -39,9 +41,6 @@ def webhook():
 
 
 def ProcessRequest(req):
-    cluster = MongoClient(
-        "mongodb+srv://mdyamin:yamin787898@cluster0.5bduk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-    db = cluster['aidoctor']
     collection = db['user_symptoms']
     result = req.get('queryResult')
     intent = result.get('intent').get('displayName')
@@ -55,7 +54,7 @@ def ProcessRequest(req):
             'symptoms': []
         })
 
-        webhookresponse = 'Hey {}, what symptoms do you have? please enter one of your symptoms.(Ex. headeache, vomiting etc.)'.format(
+        webhookresponse = 'Hey {}, what symptoms do you have? please enter one of your symptoms.(Ex. headache, vomiting etc.)'.format(
             name)
 
         return {
@@ -172,46 +171,67 @@ def chat_bot():
     return render_template('bot.html')
 
 
-@app.route('/translate', methods=['POST'])
+@app.route('/dashboard')
 @cross_origin()
-def translate_text():
-    req = request.get_json(force=True)
-    text = req.get('text')
-    source = req.get('source')
-    target = req.get('target')
-    res = translate_api(text,source,target)
-    response = make_response(res)
-    response.headers['Content-Type'] = 'application/json'
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/contact')
+@cross_origin()
+def contact_us():
+    return render_template('contactUs.html')
+
+@app.route('/services')
+@cross_origin()
+def Services():
+    return render_template('services.html')
+
+@app.route('/signup', methods=['POST'])
+@cross_origin()
+def sign_up():
+    collection = db['users']
+    form_data = request.form
+    id = collection.insert_one({
+        'name': form_data['name'],
+        'email': form_data['email'],
+        'password': form_data['password'],
+        'userType': form_data['userType']
+    }).inserted_id
+    response = ''
+    if id == '':
+        response = 'failed'
+    else:
+        response = 'success'
+    return render_template('signup.html', response=response)
+
+
+@app.route('/login', methods=['POST'])
+@cross_origin()
+def login():
+    collection = db['users']
+    form_data = request.form
+    query_data = {
+        "email": form_data['email'],
+        "password": form_data['password']
+    }
+    result = collection.find_one(query_data)
+    response = ''
+    if result == None:
+        response = 'failed'
+    else:
+        response = 'succeeded'
+    
     return response
 
-def translate_api(text, source, target):
 
-    payload = urllib.parse.urlencode({
-        'q': text,
-        'source': source,
-        'target': target
-    })
-    
-    url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
-
-    headers = {
-        'content-type': "application/x-www-form-urlencoded",
-        'accept-encoding': "application/gzip",
-        'x-rapidapi-key': "1203dfb8f1msh798bedea41b1d8bp1b4a32jsn9015f6fb4a87",
-        'x-rapidapi-host': "google-translate1.p.rapidapi.com"
-    }
-
-    response = requests.request("POST", url, data=payload, headers=headers)
-
-
-    result = json.loads(response.text)
-
-    result = result.get('data').get('translations', [])[0].get('translatedText')
-
-    return {
-        'translation': result
-    }
-
+@app.route('/resetdb')
+@cross_origin()
+def reset_database():
+    collection1 = db['user_symptomps']
+    collection2 = db['users']
+    collection1.delete_many({})
+    collection2.delete_many({})
+    return "Database Cleared"
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>AI Doctor | Your Virtual Doctor</title>
+<style>
+    .example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-top-width: medium;
+        border-right-width: medium;
+        border-bottom-width: medium;
+        border-left-width: medium;
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Carousel / Slideshow -->
+
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+            <img src="{{ url_for('static', filename='img/slide1.jpg') }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="display-6 text-dark">Could a robot replace your doctor in the near future? </h5>
+                <p class="lead text-dark">The contribution of modern robotics in healthcare is undisputed</p>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+            <img src="{{ url_for('static', filename='img/slide2.jpg') }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="display-6 text-dark">Robots are assisting healthcare professionals in a variety of tasks</h5>
+                <p class="lead text-dark">ranging from performing surgical procedures to delivering drugs, and even
+                    facilitating their interaction with patients</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='img/slide3.jpg') }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="display-6 text-light">Chat with a Doctor</h5>
+                <p class="lead text-white">You can chat with a doctor anywhere & anytime you want</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Heroes / Card -->
+
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='img/stethoscope.png') }}" alt="" width="72"
+        height="57">
+    <h1 class="display-5 fw-bold">AI Doctor</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Ai Doctor functions as a virtual medical assistant. In other words, it can rapidly and
+            systematically process patient symptoms, help identify the correct diagnosis, suggest appropriate tests and
+            evidence-based treatment, and generate the encounter note. AI Doctor is mainly a chatbot service that will
+            provide you an Artificial Intelligent Doctor that can detect your disease by your symptoms. We have also an
+            online doctor service where you can chat with human doctors live. </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3">AI Doctor</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Online Doctor</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

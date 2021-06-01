@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>AI Doctor | Your Virtual Doctor</title>
+{% endblock %}
+
+{% block content %}
+
+{% if response == "success" %}
+Account Created
+{% else %}
+Account Not Created
+{% endif %}
+
+
+{% endblock %}

@@ -2,7 +2,6 @@ from flask_cors import CORS, cross_origin
 from flask import request, make_response
 import json
 from pymongo import MongoClient
-from app import app
 import pickle
 import pandas as pd
 import numpy as np
@@ -10,7 +9,7 @@ import os
 from dialogflow_v2.types import TextInput, QueryInput
 from dialogflow_v2 import SessionsClient
 from google.api_core.exceptions import InvalidArgument
-
+from app import app
 
 test_data = pd.read_csv('ml/Testing.csv', sep=',')
 test_data = test_data.drop('prognosis', axis=1)

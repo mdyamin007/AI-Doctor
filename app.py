@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_cors import cross_origin
-import webhook
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 
@@ -119,6 +118,9 @@ def reset_database():
     collection1.delete_many({})
     collection2.delete_many({})
     return "Database Cleared"
+
+import webhook
+
 
 if __name__ == '__main__':
     app.run(debug=True)

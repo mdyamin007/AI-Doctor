@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
-from pymongo import MongoClient
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_cors import cross_origin
 import webhook
 from flask_bcrypt import Bcrypt
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.secret_key = '09cd6cb8206a12b54a7ddb28566be757'
@@ -20,13 +20,18 @@ def home():
 @app.route('/bot', methods=['GET', 'POST'])
 @cross_origin()
 def chat_bot():
-    return render_template('bot.html')
-
+    if "email" in session:
+        return render_template('bot.html')
+    else:
+        return redirect(url_for('login', next='/bot'))
 
 @app.route('/dashboard')
 @cross_origin()
 def dashboard():
-    return render_template('dashboard.html')
+    if "email" in session:
+        return render_template('dashboard.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/contact')
 @cross_origin()
@@ -68,6 +73,7 @@ def login():
     if request.method == 'POST':
         collection = db['users']
         form_data = request.form
+        next_url = request.form.get('next')
         query_data = {
             "email": form_data['email']
         }
@@ -79,17 +85,31 @@ def login():
             pw = form_data['password']
             if bcrypt.check_password_hash(result['password'], pw) == True:
                 response = 'succeeded'
+                session['email'] = form_data['email']
             else:
                 response = 'failed'
         
         if response == 'failed':
             return render_template('login.html', response=response)
         else:
-            return redirect(url_for('dashboard'))
+            if next_url:
+                return redirect(next_url)
+            else:
+                return redirect(url_for('dashboard'))
     else:
-        return render_template('login.html')
+        if "email" in session:
+            return redirect(url_for("dashboard"))
+        else:
+            return render_template('login.html')
 
-
+@app.route('/logout')
+@cross_origin()
+def logout():
+    if 'email' in session:
+        session.pop("email", None)
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/resetdb')
 @cross_origin()

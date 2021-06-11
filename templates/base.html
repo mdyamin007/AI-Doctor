@@ -45,7 +45,7 @@
               Products
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">AI Doctor</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('chat_bot') }}">AI Doctor</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -60,10 +60,14 @@
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                   <button class="btn btn-outline-light" type="submit">Search</button>
               </form> -->
+        {% if "email" not in session %}
         <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal"
           data-bs-target="#loginModal">Login</button>
         <button type="button" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#signupModal">Sign
           up</button>
+        {% else %}
+        <a href="/dashboard" class="btn btn-outline-warning" role="button">Dashboard</a>
+        {% endif %}
       </div>
     </div>
   </nav>
@@ -138,8 +142,7 @@
               <legend class="col-form-label col-sm-2 pt-0">I am a</legend>
               <div class="col-sm-10">
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="userType" id="userType1" value="patient"
-                    checked>
+                  <input class="form-check-input" type="radio" name="userType" id="userType1" value="patient" checked>
                   <label class="form-check-label" for="userType1">
                     Patient
                   </label>
@@ -187,29 +190,30 @@
   {% endblock %}
 
 
-   <!-- footer section-->
+  <!-- footer section-->
 
-   <footer class="position-relative z-index-10 d-print-none">
+  <footer class="position-relative z-index-10 d-print-none">
     <!-- Copyright section of the footer-->
     <div class="py-4 font-weight-light bg-gray-800 text-gray-300" style="background-color: #343a40;">
       <div class=" container">
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-left">
-          <p class="text-sm mb-md-0" style="color: #dee2e6;">© 2021, AI Doctor. All rights reserved.</p>
-        </div>
-        <div class="col-md-6">
-          <ul class="list-inline mb-0 mt-2 mt-md-0 text-center text-md-right">
-            <li class="list-inline-item"><a href="https://www.duet.ac.bd/"><img class="w-2rem"
-                  src="{{ url_for('static', filename='img/duet_logo.png') }}" alt="DUET" width="50px" height="50px"></a>
-            </li>
-            <!-- <li class="list-inline-item"><img class="w-2rem" src="https://d19m59y37dris4.cloudfront.net/directory/1-6-1/img/mastercard.svg" alt="..."></li>
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-left">
+            <p class="text-sm mb-md-0" style="color: #dee2e6;">© 2021, AI Doctor. All rights reserved.</p>
+          </div>
+          <div class="col-md-6">
+            <ul class="list-inline mb-0 mt-2 mt-md-0 text-center text-md-right">
+              <li class="list-inline-item"><a href="https://www.duet.ac.bd/"><img class="w-2rem"
+                    src="{{ url_for('static', filename='img/duet_logo.png') }}" alt="DUET" width="50px"
+                    height="50px"></a>
+              </li>
+              <!-- <li class="list-inline-item"><img class="w-2rem" src="https://d19m59y37dris4.cloudfront.net/directory/1-6-1/img/mastercard.svg" alt="..."></li>
                   <li class="list-inline-item"><img class="w-2rem" src="https://d19m59y37dris4.cloudfront.net/directory/1-6-1/img/paypal.svg" alt="..."></li>
                   <li class="list-inline-item"><img class="w-2rem" src="https://d19m59y37dris4.cloudfront.net/directory/1-6-1/img/western-union.svg" alt="..."></li> -->
-          </ul>
+            </ul>
+          </div>
         </div>
-      </div>
   </footer>
-  
+
 
   <!-- Optional JavaScript; choose one of the two! -->
 

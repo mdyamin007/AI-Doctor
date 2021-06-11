@@ -111,7 +111,7 @@ def ProcessRequest(req):
 
         webhookresponse = f"""Hey {name}. You might have {disease}.
 
-        {description['disease']}
+        {description[disease]}
 
         """
 

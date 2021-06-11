@@ -10,6 +10,7 @@ from dialogflow_v2.types import TextInput, QueryInput
 from dialogflow_v2 import SessionsClient
 from google.api_core.exceptions import InvalidArgument
 from app import app
+import csv
 
 test_data = pd.read_csv('ml/Testing.csv', sep=',')
 test_data = test_data.drop('prognosis', axis=1)
@@ -18,6 +19,18 @@ model = pickle.load(open('ml/model.pkl', 'rb'))
 cluster = MongoClient(
         "mongodb+srv://mdyamin:yamin787898@cluster0.5bduk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster['aidoctor']
+
+fields = []
+description = {}
+
+with open('ml/disease_description.csv') as csvfile:
+    csvreader = csv.reader(csvfile)
+    fields = next(csvreader)
+
+    for row in csvreader:
+        disease, desc = row
+        description[disease] = desc
+
 
 @app.route('/webhook', methods=['POST'])
 @cross_origin()
@@ -96,7 +109,13 @@ def ProcessRequest(req):
         disease = model.predict([np.array(y)])
         disease = disease[0]
 
-        webhookresponse = f"Hey {name}. You may have {disease}."
+        webhookresponse = f"""Hey {name}. You might have {disease}.
+
+        {description['disease']}
+
+        """
+
+        
 
         return {
             "fulfillmentMessages": [
@@ -109,6 +128,9 @@ def ProcessRequest(req):
                 }
             ]
         }
+
+
+
 
 
 @app.route('/chatapi', methods=['POST'])

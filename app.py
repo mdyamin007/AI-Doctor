@@ -39,7 +39,7 @@ def contact_us():
 
 @app.route('/services')
 @cross_origin()
-def Services():
+def services():
     return render_template('services.html')
 
 @app.route('/signup', methods=['POST'])

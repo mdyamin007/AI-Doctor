@@ -127,7 +127,7 @@ def ProcessRequest(req):
         Take following precautions: 
 
         """
-        i = 0
+        i = 1
         for precaution in precaution_list:
             webhookresponse = webhookresponse + str(i) + ". " + precaution + ", "
             i = i + 1

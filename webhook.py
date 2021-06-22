@@ -22,6 +22,7 @@ db = cluster['aidoctor']
 
 fields = []
 description = {}
+precautionDictionary = {}
 
 with open('ml/disease_description.csv') as csvfile:
     csvreader = csv.reader(csvfile)
@@ -30,6 +31,14 @@ with open('ml/disease_description.csv') as csvfile:
     for row in csvreader:
         disease, desc = row
         description[disease] = desc
+
+with open('ml/symptom_precaution.csv') as csv_file:
+
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            _prec={row[0]:[row[1],row[2],row[3],row[4]]}
+            precautionDictionary.update(_prec)
 
 
 @app.route('/webhook', methods=['POST'])
@@ -109,9 +118,18 @@ def ProcessRequest(req):
         disease = model.predict([np.array(y)])
         disease = disease[0]
 
+        precaution_list = precautionDictionary[disease]
+
         webhookresponse = f"""Hey {name}. You might have {disease}.
 
         {description[disease]}
+
+        Take following precautions: 
+        
+        {precaution_list[0]} 
+        {precaution_list[1]} 
+        {precaution_list[2]} 
+        {precaution_list[3]}
 
         """
 

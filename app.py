@@ -32,6 +32,17 @@ def dashboard():
     else:
         return redirect(url_for('login'))
 
+@app.route('/profile', methods=['GET', 'POST'])
+@cross_origin()
+def profile():
+    if request.method == 'GET':
+        if "email" in session:
+            return render_template('profile.html')
+        else:
+            return redirect(url_for('login', next='/bot'))
+    else:
+        pass
+
 @app.route('/contact')
 @cross_origin()
 def contact_us():

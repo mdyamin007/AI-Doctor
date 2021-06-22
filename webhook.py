@@ -125,13 +125,11 @@ def ProcessRequest(req):
         {description[disease]}
 
         Take following precautions: 
-        
-        {precaution_list[0]} 
-        {precaution_list[1]} 
-        {precaution_list[2]} 
-        {precaution_list[3]}
 
         """
+        i = 0
+        for precaution in precaution_list:
+            webhookresponse = webhookresponse + str(i) + ". " + precaution + " \n"
 
         
 

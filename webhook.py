@@ -129,8 +129,8 @@ def ProcessRequest(req):
         """
         i = 0
         for precaution in precaution_list:
-            webhookresponse = webhookresponse + str(i) + ". " + precaution + " \n"
-
+            webhookresponse = webhookresponse + str(i) + ". " + precaution + ", "
+            i = i + 1
         
 
         return {

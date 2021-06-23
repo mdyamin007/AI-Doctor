@@ -10,7 +10,7 @@ click==7.1.2
 dialogflow==1.1.0
 dnspython==1.16.0
 docx2txt==0.8
-eventlet==0.31.0
+eventlet==0.30.2
 Flask==1.1.2
 Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.10

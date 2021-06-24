@@ -8,7 +8,9 @@
 <h1>Welcome to chat room</h1>
 
 <div id="messages">
-    
+    {% for message in messages %}
+        <div><b>{{ message.sender }}&nbsp;[{{ message.created_at }}]:&nbsp;</b> {{ message.text }}</div>
+    {% endfor %}
 </div>
 
 

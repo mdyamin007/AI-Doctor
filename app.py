@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from flask_socketio import SocketIO, join_room, leave_room
 import datetime
+from dbchat import save_message, get_messages
 
 app = Flask(__name__)
 app.secret_key = '09cd6cb8206a12b54a7ddb28566be757'
@@ -129,35 +130,42 @@ def logout():
 def reset_database():
     collection1 = db['user_symptomps']
     collection2 = db['users']
+    collection3 = db['messages']
     collection1.delete_many({})
     collection2.delete_many({})
+    collection3.delete_many({})
     return "Database Cleared"
 
 @app.route('/chat')
 @cross_origin()
 def chat():
-    return render_template('chat.html', username=session['email'])
+    messages = get_messages()
+    return render_template('chat.html', username=session['email'], messages=messages)
 
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room: {}".format(data['username'], data['message']))
     data['created_at'] = datetime.datetime.now().strftime("%d %b, %H:%M")
-    # save_message(data['room'], data['message'], data['username'])
+    save_message(data['message'], data['username'])
     socketio.emit('receive_message', data)
 
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room".format(data['username']))
-    # join_room(data['room'])
+    join_room(1)
+    text = data['username'] + " has joined the room"
+    save_message(text, data['username'])
     socketio.emit('join_room_announcement', data)
 
 
 @socketio.on('leave_room')
 def handle_leave_room_event(data):
     app.logger.info("{} has left the room".format(data['username']))
-    leave_room(data['room'])
+    leave_room(1)
+    text = data['username'] + " has left the room"
+    save_message(text, data['username'])
     socketio.emit('leave_room_announcement', data)
 
 

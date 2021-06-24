@@ -7,10 +7,11 @@ db = cluster['aidoctor']
 
 messages_collection = db.get_collection('messages')
 
-def save_message(text, sender):
+def save_message(text, sender, userType):
     messages_collection.insert_one({
         'text':text,
         'sender':sender,
+        'userType': userType,
         'created_at':datetime.now()
         })
     

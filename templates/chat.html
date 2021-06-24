@@ -1,79 +1,230 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'base_dashboard.html' %}
+
+{% block head %}
+    <title> Online Doctor | Chat room </title>
     <meta charset="UTF-8">
-    <title>My Chat App</title>
-</head>
-<body>
-<h1>Welcome to chat room</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
 
-<div id="messages">
-    {% for message in messages %}
-        <div><b>{{ message.sender }}&nbsp;[{{ message.created_at }}]:&nbsp;</b> {{ message.text }}</div>
-    {% endfor %}
-</div>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+{% endblock %}
+
+{% block content %}
+    <div class="container my-5 py-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-3 col-sm-12">
+                <!-- DIRECT CHAT SUCCESS -->
+                <div class="box box-success direct-chat direct-chat-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Chat room</h3>
+
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <!-- Conversations are loaded here -->
+                        <div class="direct-chat-messages" id="messages">
+                            <!-- Message. Default to the left -->
+
+                            {% for message in messages %}
+
+                                {% if "has left the room" in message.text or "has joined the room" in message.text %}
+
+                                    <div><span><small>{{ message.text }}</small></span></div>
+
+                                {% elif message.userType == "patient" %}
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">{{ message.sender }}&nbsp;({{ message.userType }})&nbsp;</span>
+                                            <span class="direct-chat-timestamp pull-right">{{ message.created_at }}</span>
+                                        </div>
+                                        <!-- /.direct-chat-info -->
+                                        <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_1.jpg"
+                                            alt="Message User Image"><!-- /.direct-chat-img -->
+                                        <div class="direct-chat-text">
+                                            {{ message.text }}
+                                        </div>
+                                        <!-- /.direct-chat-text -->
+                                    </div>
+                                    <!-- /.direct-chat-msg -->
+                                
+                                {% else %}
+                                    <div class="direct-chat-msg right">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-right">{{ message.sender }}&nbsp;({{ message.userType }})&nbsp;</span>
+                                            <span class="direct-chat-timestamp pull-left">{{ message.created_at }}</span>
+                                        </div>
+                                        <!-- /.direct-chat-info -->
+                                        <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg"
+                                            alt="Message User Image"><!-- /.direct-chat-img -->
+                                        <div class="direct-chat-text">
+                                            {{ message.text }}
+                                        </div>
+                                        <!-- /.direct-chat-text -->
+                                    </div>
+                                    <!-- /.direct-chat-msg -->
+                                {% endif %}
+                            {% endfor %}
+                            
+
+                            <!-- Message to the right -->
+                            
+                        </div>
+                        <!--/.direct-chat-messages-->
+
+                        <!-- Contacts are loaded here -->
+                        <div class="direct-chat-contacts">
+                            <ul class="contacts-list">
+                                <li>
+                                    <a href="#">
+                                        <img class="contacts-list-img" src="https://bootdey.com/img/Content/user_1.jpg">
+
+                                        <div class="contacts-list-info">
+                                            <span class="contacts-list-name">
+                                                Count Dracula
+                                                <small class="contacts-list-date pull-right">2/28/2015</small>
+                                            </span>
+                                            <span class="contacts-list-msg">How have you been? I was...</span>
+                                        </div>
+                                        <!-- /.contacts-list-info -->
+                                    </a>
+                                </li>
+                                <!-- End Contact Item -->
+                            </ul>
+                            <!-- /.contatcts-list -->
+                        </div>
+                        <!-- /.direct-chat-pane -->
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <form id="message_input_form">
+                            <div class="input-group">
+                                <input type="text" name="message" placeholder="Type Message ..." class="form-control"
+                                    id="message_input">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-success btn-flat">Send</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-footer-->
+                </div>
+                <!--/.direct-chat -->
+            </div>
+        </div>
+    </div>
 
 
-<form id="message_input_form">
-    <input type="text" id="message_input" placeholder="Enter your message here">
-    <button type="submit">Send</button>
-</form>
 
 
 
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-<script>
-    const socket = io.connect("https://aidoctor.herokuapp.com");
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
-    socket.on('connect', function () {
-        socket.emit('join_room', {
-            username: "{{ username }}",
+
+    <script>
+
+        function scrollToBottom() {
+            messages = document.getElementById("messages");
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        scrollToBottom();
+
+
+        const socket = io.connect("https://aidoctor.herokuapp.com");
+
+        socket.on('connect', function () {
+            socket.emit('join_room', {
+                username: "{{ username }}",
+                userType: "{{ userType }}"
+            });
+
+            let message_input = document.getElementById('message_input');
+
+            document.getElementById('message_input_form').onsubmit = function (e) {
+                e.preventDefault();
+                let message = message_input.value.trim();
+                if (message.length) {
+                    socket.emit('send_message', {
+                        username: "{{ username }}",
+                        userType: "{{ userType }}",
+                        message: message
+                    })
+                }
+                message_input.value = '';
+                message_input.focus();
+            }
         });
 
-        let message_input = document.getElementById('message_input');
+        window.onbeforeunload = function () {
+            socket.emit('leave_room', {
+                username: "{{ username }}",
+                userType: "{{ userType }}"
+            })
+        };
 
-        document.getElementById('message_input_form').onsubmit = function (e) {
-            e.preventDefault();
-            let message = message_input.value.trim();
-            if (message.length) {
-                socket.emit('send_message', {
-                    username: "{{ username }}",
-                    message: message
-                })
-            }
-            message_input.value = '';
-            message_input.focus();
-        }
-    });
-
-    window.onbeforeunload = function () {
-        socket.emit('leave_room', {
-            username: "{{ username }}",
-        })
-    };
-
-    socket.on('receive_message', function (data) {
-        console.log(data);
-        const newNode = document.createElement('div');
-        newNode.innerHTML = `<b>${data.username}&nbsp;[${data.created_at}]:&nbsp;</b> ${data.message}`;
-        document.getElementById('messages').appendChild(newNode);
-    });
-
-    socket.on('join_room_announcement', function (data) {
-        console.log(data);
-        if (data.username !== "{{ username }}") {
+        socket.on('receive_message', function (data) {
+            console.log(data);
             const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
+            if (data.userType == "patient") {
+                newNode.innerHTML = `
+        <div class="direct-chat-msg">
+            <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-left">${data.username}&nbsp;(${data.userType})&nbsp;</span>
+                <span class="direct-chat-timestamp pull-right">${data.created_at}</span>
+            </div>
+            <!-- /.direct-chat-info -->
+            <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_1.jpg"
+                alt="Message User Image"><!-- /.direct-chat-img -->
+            <div class="direct-chat-text">
+                ${data.message}
+            </div>
+            <!-- /.direct-chat-text -->
+        </div>
+        <!-- /.direct-chat-msg -->
+        `;
+            } else {
+                newNode.innerHTML = `
+                    <div class="direct-chat-msg right">
+                        <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-name pull-right">${data.username}&nbsp;(${data.userType})&nbsp;</span>
+                            <span class="direct-chat-timestamp pull-left">${data.created_at}</span>
+                        </div>
+                        <!-- /.direct-chat-info -->
+                        <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg"
+                            alt="Message User Image"><!-- /.direct-chat-img -->
+                        <div class="direct-chat-text">
+                            ${data.message}
+                        </div>
+                        <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+                `;
+            }
             document.getElementById('messages').appendChild(newNode);
-        }
-    });
+            scrollToBottom();
+        });
 
-    socket.on('leave_room_announcement', function (data) {
-        console.log(data);
-        const newNode = document.createElement('div');
-        newNode.innerHTML = `<b>${data.username}</b> has left the room`;
-        document.getElementById('messages').appendChild(newNode);
-    });
-</script>
-</html>
+        socket.on('join_room_announcement', function (data) {
+            console.log(data);
+            if (data.username !== "{{ username }}") {
+                const newNode = document.createElement('div');
+                newNode.innerHTML = `<div><span><small>${data.username}(${data.userType}) has joined the room</small></span></div>`;
+                document.getElementById('messages').appendChild(newNode);
+                scrollToBottom();
+            }
+        });
+
+        socket.on('leave_room_announcement', function (data) {
+            console.log(data);
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<div><span><small>${data.username}(${data.userType}) has left the room</small></span></div>`;
+            document.getElementById('messages').appendChild(newNode);
+            scrollToBottom();
+        });
+
+    </script>
+
+{% endblock %}

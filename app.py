@@ -100,6 +100,8 @@ def login():
             if bcrypt.check_password_hash(result['password'], pw) == True:
                 response = 'succeeded'
                 session['email'] = form_data['email']
+                session['name'] = result['name']
+                session['userType'] = result['userType']
             else:
                 response = 'failed'
         
@@ -121,6 +123,8 @@ def login():
 def logout():
     if 'email' in session:
         session.pop("email", None)
+        session.pop("username", None)
+        session.pop("userType", None)
         return redirect(url_for('home'))
     else:
         return redirect(url_for('home'))
@@ -139,15 +143,18 @@ def reset_database():
 @app.route('/chat')
 @cross_origin()
 def chat():
-    messages = get_messages()
-    return render_template('chat.html', username=session['email'], messages=messages)
+    if "email" in session:
+        messages = get_messages()
+        return render_template('chat.html', username=session['name'], userType=session['userType'], messages=messages)
+    else:
+        return redirect(url_for('login', next='/chat'))
 
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room: {}".format(data['username'], data['message']))
     data['created_at'] = datetime.datetime.now().strftime("%d %b, %H:%M")
-    save_message(data['message'], data['username'])
+    save_message(data['message'], data['username'], data['userType'])
     socketio.emit('receive_message', data)
 
 
@@ -155,8 +162,8 @@ def handle_send_message_event(data):
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room".format(data['username']))
     join_room(1)
-    text = data['username'] + " has joined the room"
-    save_message(text, data['username'])
+    text = data['username'] + "(" + data['userType'] + ")" + " has joined the room"
+    save_message(text, data['username'], data['userType'])
     socketio.emit('join_room_announcement', data)
 
 
@@ -164,8 +171,8 @@ def handle_join_room_event(data):
 def handle_leave_room_event(data):
     app.logger.info("{} has left the room".format(data['username']))
     leave_room(1)
-    text = data['username'] + " has left the room"
-    save_message(text, data['username'])
+    text = data['username'] + "(" + data['userType'] + ")" + " has left the room"
+    save_message(text, data['username'], data['userType'])
     socketio.emit('leave_room_announcement', data)
 
 

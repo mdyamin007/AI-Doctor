@@ -41,7 +41,7 @@
                                             <span class="direct-chat-timestamp pull-right">{{ message.created_at }}</span>
                                         </div>
                                         <!-- /.direct-chat-info -->
-                                        <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_1.jpg"
+                                        <img class="direct-chat-img" src="{{ url_for('static', filename='img/patient_avatar.png') }}"
                                             alt="Message User Image"><!-- /.direct-chat-img -->
                                         <div class="direct-chat-text">
                                             {{ message.text }}
@@ -57,7 +57,7 @@
                                             <span class="direct-chat-timestamp pull-left">{{ message.created_at }}</span>
                                         </div>
                                         <!-- /.direct-chat-info -->
-                                        <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg"
+                                        <img class="direct-chat-img" src="{{ url_for('static', filename='img/doctor_avatar.jpg') }}"
                                             alt="Message User Image"><!-- /.direct-chat-img -->
                                         <div class="direct-chat-text">
                                             {{ message.text }}
@@ -73,28 +73,6 @@
                             
                         </div>
                         <!--/.direct-chat-messages-->
-
-                        <!-- Contacts are loaded here -->
-                        <div class="direct-chat-contacts">
-                            <ul class="contacts-list">
-                                <li>
-                                    <a href="#">
-                                        <img class="contacts-list-img" src="https://bootdey.com/img/Content/user_1.jpg">
-
-                                        <div class="contacts-list-info">
-                                            <span class="contacts-list-name">
-                                                Count Dracula
-                                                <small class="contacts-list-date pull-right">2/28/2015</small>
-                                            </span>
-                                            <span class="contacts-list-msg">How have you been? I was...</span>
-                                        </div>
-                                        <!-- /.contacts-list-info -->
-                                    </a>
-                                </li>
-                                <!-- End Contact Item -->
-                            </ul>
-                            <!-- /.contatcts-list -->
-                        </div>
                         <!-- /.direct-chat-pane -->
                     </div>
                     <!-- /.box-body -->
@@ -176,7 +154,7 @@
                 <span class="direct-chat-timestamp pull-right">${data.created_at}</span>
             </div>
             <!-- /.direct-chat-info -->
-            <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_1.jpg"
+            <img class="direct-chat-img" src="{{ url_for('static', filename='img/patient_avatar.png') }}"
                 alt="Message User Image"><!-- /.direct-chat-img -->
             <div class="direct-chat-text">
                 ${data.message}
@@ -193,7 +171,7 @@
                             <span class="direct-chat-timestamp pull-left">${data.created_at}</span>
                         </div>
                         <!-- /.direct-chat-info -->
-                        <img class="direct-chat-img" src="https://bootdey.com/img/Content/user_2.jpg"
+                        <img class="direct-chat-img" src="{{ url_for('static', filename='img/doctor_avatar.jpg') }}"
                             alt="Message User Image"><!-- /.direct-chat-img -->
                         <div class="direct-chat-text">
                             ${data.message}

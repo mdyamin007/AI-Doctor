@@ -330,14 +330,9 @@ def ProcessRequest(req):
             webhookresponse = webhookresponse + str(i) + ". " + precaution + ", "
             i = i + 1
         
-        if "email" in session:
-            user_collection = db.get_collection('users')
-            query_data = {
-                "email": session['email']
-            }
-            user_collection.update_one(query_data, {
-                "$set" : {"disease": disease}
-            })
+        users = db['users']
+        users.update_one({"name":name}, {"$set":{"disease":disease}})
+
 
         return {
             "fulfillmentMessages": [

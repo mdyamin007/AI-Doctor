@@ -100,7 +100,8 @@ def sign_up():
             'name': form_data['name'],
             'email': form_data['email'],
             'password': pw_hash,
-            'userType': form_data['userType']
+            'userType': form_data['userType'],
+            'disease': '',
         }).inserted_id
         response = ''
         if id == '':
@@ -163,9 +164,9 @@ def logout():
 @app.route('/resetdb')
 @cross_origin()
 def reset_database():
-    collection1 = db['user_symptomps']
-    collection2 = db['users']
-    collection3 = db['messages']
+    collection1 = db.get_collection('user_symptoms')
+    collection2 = db.get_collection('users')
+    collection3 = db.get_collection('messages')
     collection1.delete_many({})
     collection2.delete_many({})
     collection3.delete_many({})
@@ -335,8 +336,8 @@ def ProcessRequest(req):
                 "email": session['email']
             }
             user_collection.update_one(query_data, {
-                "$push" : {"disease": disease}
-            }, upsert=True)
+                "$set" : {"disease": disease}
+            })
 
         return {
             "fulfillmentMessages": [

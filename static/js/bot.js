@@ -90,7 +90,7 @@ function serverMessage(response2) {
 
 function fetchmsg() {
 
-  var url = 'https://aidoctor.herokuapp.com/chatapi';
+  var url = 'https://chatapi-aidoctor.herokuapp.com/chatapi';
 
   var data = document.getElementById('MSG').value;
 

@@ -353,51 +353,5 @@ def ProcessRequest(req):
 
 
 
-
-@app.route('/chatapi', methods=['POST'])
-@cross_origin()
-def chat_response():
-    req = request.get_json(force=True)
-    msg = req.get('MSG')
-    res = DialogflowInteraction(msg)
-    response = make_response(res)
-    response.headers['Content-Type'] = 'application/json'
-    return response
-
-
-def DialogflowInteraction(userText):
-
-    environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'private_key.json'
-    DIALOGFLOW_PROJECT_ID = 'ai-doctor-ebfe'
-    DIALOGFLOW_LANGUAGE_CODE = 'en'
-    SESSION_ID = 'me'
-
-    text_to_be_analyzed = userText
-
-    session_client = SessionsClient()
-    session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
-    text_input = TextInput(text=text_to_be_analyzed,
-                           language_code=DIALOGFLOW_LANGUAGE_CODE)
-    query_input = QueryInput(text=text_input)
-    try:
-        response = session_client.detect_intent(
-            session=session, query_input=query_input)
-    except InvalidArgument:
-        raise
-
-    botText = response.query_result.fulfillment_text
-    intent = response.query_result.intent.display_name
-
-    if intent == 'get_info' or intent == 'get_symptom' or intent == 'get_symptom - no':
-        return {
-            'Reply': response.query_result.fulfillment_messages[0].text.text[0]
-        }
-
-    else:
-        return {
-            'Reply': botText
-        }
-
-
 if __name__ == '__main__':
     socketio.run(app, debug=True)

@@ -162,12 +162,13 @@ def ProcessRequest(req):
 @app.route('/chatapi', methods=['POST'])
 @cross_origin()
 def chat_response():
-    req = request.get_json(force=True)
-    msg = req.get('MSG')
-    res = DialogflowInteraction(msg)
-    response = make_response(res)
-    response.headers['Content-Type'] = 'application/json'
-    return response
+    if request.method == "POST":
+        req = request.get_json(force=True)
+        msg = req.get('MSG')
+        res = DialogflowInteraction(msg)
+        response = make_response(res)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
 
 def DialogflowInteraction(userText):

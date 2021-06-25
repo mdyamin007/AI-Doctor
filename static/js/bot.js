@@ -98,7 +98,6 @@ function fetchmsg() {
 
   console.log("abc", data);
   fetch(url, {
-    mode: 'no-cors',
     method: 'POST',
     body: JSON.stringify({ 'MSG': data })
   }).then(res => res.json())

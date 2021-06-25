@@ -3,17 +3,17 @@ from flask_cors import cross_origin, CORS
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from flask_socketio import SocketIO, join_room, leave_room
-import datetime
+from datetime import datetime
 from dbchat import save_message, get_messages
-import pickle
-import pandas as pd
-import numpy as np
-import csv
-import json
+from pickle import load
+from pandas import read_csv
+from numpy import array
+from csv import reader
+from json import dumps
 from dialogflow_v2.types import TextInput, QueryInput
 from dialogflow_v2 import SessionsClient
 from google.api_core.exceptions import InvalidArgument
-import os
+from os import environ
 
 app = Flask(__name__)
 app.secret_key = '09cd6cb8206a12b54a7ddb28566be757'
@@ -184,7 +184,7 @@ def chat():
 @socketio.on('send_message')
 def handle_send_message_event(data):
     app.logger.info("{} has sent message to the room: {}".format(data['username'], data['message']))
-    data['created_at'] = datetime.datetime.now().strftime("%d %b, %H:%M")
+    data['created_at'] = datetime.now().strftime("%d %b, %H:%M")
     save_message(data['message'], data['username'], data['userType'])
     socketio.emit('receive_message', data)
 
@@ -208,10 +208,10 @@ def handle_leave_room_event(data):
 
 
 
-test_data = pd.read_csv('ml/Testing.csv', sep=',')
+test_data = read_csv('ml/Testing.csv', sep=',')
 test_data = test_data.drop('prognosis', axis=1)
 symptoms = list(test_data.columns)
-model = pickle.load(open('ml/model.pkl', 'rb'))
+model = load(open('ml/model.pkl', 'rb'))
 db = cluster['aidoctor']
 
 
@@ -220,7 +220,7 @@ description = {}
 precautionDictionary = {}
 
 with open('ml/disease_description.csv') as csvfile:
-    csvreader = csv.reader(csvfile)
+    csvreader = reader(csvfile)
     fields = next(csvreader)
 
     for row in csvreader:
@@ -229,7 +229,7 @@ with open('ml/disease_description.csv') as csvfile:
 
 with open('ml/symptom_precaution.csv') as csv_file:
 
-        csv_reader = csv.reader(csv_file, delimiter=',')
+        csv_reader = reader(csv_file, delimiter=',')
         line_count = 0
         for row in csv_reader:
             _prec={row[0]:[row[1],row[2],row[3],row[4]]}
@@ -241,7 +241,7 @@ with open('ml/symptom_precaution.csv') as csv_file:
 def webhook():
     req = request.get_json(silent=True, force=True)
     res = ProcessRequest(req)
-    res = json.dumps(res, indent=4)
+    res = dumps(res, indent=4)
     print(res)
     response = make_response(res)
     response.headers['Content-Type'] = 'application/json'
@@ -310,7 +310,7 @@ def ProcessRequest(req):
             y.append(0)
         for i in range(len(user_symptoms)):
             y[symptoms.index(user_symptoms[i])] = 1
-        disease = model.predict([np.array(y)])
+        disease = model.predict([array(y)])
         disease = disease[0]
 
         precaution_list = precautionDictionary[disease]
@@ -367,7 +367,7 @@ def chat_response():
 
 def DialogflowInteraction(userText):
 
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'private_key.json'
+    environ["GOOGLE_APPLICATION_CREDENTIALS"] = 'private_key.json'
     DIALOGFLOW_PROJECT_ID = 'ai-doctor-ebfe'
     DIALOGFLOW_LANGUAGE_CODE = 'en'
     SESSION_ID = 'me'

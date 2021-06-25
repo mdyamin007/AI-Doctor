@@ -98,19 +98,15 @@ function fetchmsg() {
 
   console.log("abc", data);
   fetch(url, {
-    mode: 'no-cors',
+    mode: 'cors',
     method: 'POST',
-    body: JSON.stringify({ 'MSG': data })
-  }).then(res => res.json())
-    .then(response => {
+    body: JSON.stringify({ 'MSG': data }),
+  }).then(res => res.json()).then(response => {
       console.log(response);
       serverMessage(response.Reply);
-      speechSynthesis.speak(new SpeechSynthesisUtterance(response.Reply))
-
-
+      speechSynthesis.speak(new SpeechSynthesisUtterance(response.Reply));
     })
     .catch(error => console.error('Error h:', error));
-
 }
 
 

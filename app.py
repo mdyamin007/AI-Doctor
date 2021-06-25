@@ -335,7 +335,7 @@ def ProcessRequest(req):
                 "email": session['email']
             }
             result = user_collection.find_one_and_update(query_data, {
-                "$set" : {"symptoms": user_symptoms, "disease": disease}
+                "$push" : {"symptoms": user_symptoms, "disease": disease}
             })
 
         return {

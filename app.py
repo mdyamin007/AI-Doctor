@@ -20,7 +20,7 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/bot', methods=['GET', 'POST'])
+@app.route('/bot')
 @cross_origin()
 def chat_bot():
     if "email" in session:
@@ -36,16 +36,38 @@ def dashboard():
     else:
         return redirect(url_for('login'))
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile')
 @cross_origin()
 def profile():
-    if request.method == 'GET':
-        if "email" in session:
-            return render_template('profile.html')
-        else:
-            return redirect(url_for('login', next='/bot'))
+    return render_template('profile.html')
+
+@app.route('/settings', methods=['GET', 'POST'])
+@cross_origin()
+def settings():
+    if request.method == "GET":
+        return render_template('settings.html')
     else:
-        pass
+        collection = db['users']
+        form_data = request.form
+        query_data = {
+            "email": form_data['email']
+        }
+        result = collection.find_one(query_data)
+        response = ''
+        if bcrypt.check_password_hash(result['password'], form_data['current_password']) == True:
+            update_data = {
+                "name": form_data['name'],
+                "password": bcrypt.generate_password_hash(form_data['new_password1']).decode('utf-8'),
+                "userType": form_data['userType']
+            }
+            result = collection.find_one_and_update(query_data, { "$set" : update_data })
+            if result:
+                response = 'succeeded'
+                session['name'] = form_data['name']
+                session['userType'] = form_data['userType']
+        else:
+            response = 'failed'
+        return render_template('settings.html', response=response)
 
 @app.route('/contact')
 @cross_origin()

@@ -1,0 +1,69 @@
+{% extends 'base_dashboard.html' %}
+
+{% block head %}
+
+<title> Settings | AI Doctor </title>
+
+{% endblock %}
+
+{% block content %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Settings</h1>
+    </div>
+
+    <div class="container">
+
+        {% if response == 'failed' %}
+        <div class="alert alert-danger text-center" role="alert">
+            Profile could not updated!
+        </div>
+        {% elif response == 'succeeded' %}
+        <div class="alert alert-success text-center" role="alert">
+            Profile updated!
+        </div>
+        {% endif %}
+
+        <div class="card px-3 py-3 mx-auto" style="width:50em;">
+            <form action="/settings" method="POST"
+                oninput='new_password2.setCustomValidity(new_password1.value != new_password2.value ? "Passwords do not match." : "")'>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="name" name="name" class="form-control" id="name" value="{{ session['name']}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" name="email" class="form-control" id="email" value="{{ session['email'] }}"
+                        readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="userType" class="form-label">User Type:</label>
+                    <select name="userType" class="form-select form-select-sm" aria-label="userType">
+                        <option value="{{ session['userType'] }}" selected>{{ session['userType'].capitalize() }}
+                        </option>
+                        <option value="{{ 'doctor' if session['userType'] != 'doctor' else 'patient' }}">{{ 'Doctor' if
+                            session['userType'] != 'doctor' else 'Patient' }}</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="currentpassword" class="form-label"> Current Password</label>
+                    <input type="password" name="current_password" class="form-control" id="current_password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="new_password1" class="form-label"> New Password</label>
+                    <input type="password" name="new_password1" class="form-control" id="new_password1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="new_password2" class="form-label"> New Password</label>
+                    <input type="password" name="new_password2" class="form-control" id="new_password2" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

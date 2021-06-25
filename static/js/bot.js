@@ -9,8 +9,8 @@ try {
   var recognition = new SpeechRecognition();
 }
 catch (e) {
-  console.error(e);
-  $('.no-browser-support').show();
+  console.log(e);
+  document.querySelector("div.no-browser-support").style.display = "block";
 }
 
 $('#start-record-btn').on('click', function (e) {

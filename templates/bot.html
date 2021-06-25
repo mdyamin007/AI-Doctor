@@ -43,14 +43,16 @@
     <div class="messages">
       <div class="messages-content"></div>
     </div>
-    <form class="message-box" id="mymsg" method="POST">
+    <form class="message-box" id="mymsg">
       <input type="text" id="MSG" name="MSG" class="message-input" placeholder="Type message...">
 
       <i class="fas fa-microphone" id="start-record-btn"></i>
       <button type="submit" class="message-submit">Send</button>
     </form>
-    <h3 class="no-browser-support" hidden>Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo
+    <div class="no-browser-support" style="display: none;">
+    <h3 style="color: red;">Sorry, Your Browser Doesn't Support the Web Speech API. Try Opening This Demo
       In Google Chrome.</h3>
+    </div>
   </div>
   <!-- <div class="bg"></div> -->
 

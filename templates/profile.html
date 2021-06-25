@@ -9,9 +9,31 @@
 {% block content %}
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-      <h1 class="h2">Profile</h1>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Profile</h1>
+  </div>
+  <div class="container-fluid">
+    <div class="card-rows py-2">
+      <div class="card-columns mx-auto d-flex justify-content-center col-12">
+        <div class="card col-6">
+          <h4 class="card-title text-center">{{session['name']}}</h4>
+          <h6 class="card-subtitle text-center">{{session['userType']}}</h4>
+            <p class="card-text my-2 text-center"><b>Email:</b> {{session['email']}}</p>
+        </div>
+      </div>
     </div>
+    <div class="card text-dark bg-warning my-3 mx-auto" style="max-width: 18rem;">
+      <div class="card-header">Disease History</div>
+      <div class="card-body">
+        <h5 class="card-title">Warning card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  </div>
+  </div>
 </main>
 
 {% endblock %}

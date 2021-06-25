@@ -1,5 +1,5 @@
 from flask_cors import CORS, cross_origin
-from flask import request, make_response
+from flask import request, make_response, session
 import json
 from pymongo import MongoClient
 import pickle
@@ -134,6 +134,14 @@ def ProcessRequest(req):
             webhookresponse = webhookresponse + str(i) + ". " + precaution + ", "
             i = i + 1
         
+        if "email" in session:
+            user_collection = db['users']
+            query_data = {
+                "email": session['email']
+            }
+            result = user_collection.find_one_and_update(query_data, {
+                "$set" : {"symptoms": user_symptoms, "disease": disease}
+            })
 
         return {
             "fulfillmentMessages": [

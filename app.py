@@ -331,7 +331,7 @@ def ProcessRequest(req):
             i = i + 1
         
         users = db['users']
-        users.update_one({"name":name}, {"$set":{"disease":disease}})
+        users.update_one({"name":name[1:]}, {"$set":{"disease":disease}})
 
 
         return {

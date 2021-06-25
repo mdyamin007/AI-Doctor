@@ -330,12 +330,12 @@ def ProcessRequest(req):
             i = i + 1
         
         if "email" in session:
-            user_collection = db['users']
+            user_collection = db.get_collection('users')
             query_data = {
                 "email": session['email']
             }
-            result = user_collection.find_one_and_update(query_data, {
-                "$push" : {"symptoms": user_symptoms, "disease": disease}
+            user_collection.update_one(query_data, {
+                "$push" : {"disease": disease}
             })
 
         return {

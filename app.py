@@ -336,7 +336,7 @@ def ProcessRequest(req):
             }
             user_collection.update_one(query_data, {
                 "$push" : {"disease": disease}
-            })
+            }, upsert=True)
 
         return {
             "fulfillmentMessages": [

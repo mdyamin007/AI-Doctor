@@ -23,6 +23,33 @@ bcrypt = Bcrypt(app)
 cluster = MongoClient(
         "mongodb+srv://mdyamin:yamin787898@cluster0.5bduk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster['aidoctor']
+test_data = read_csv('ml/Testing.csv', sep=',')
+test_data = test_data.drop('prognosis', axis=1)
+symptoms = list(test_data.columns)
+model = load(open('ml/model.pkl', 'rb'))
+db = cluster['aidoctor']
+
+
+fields = []
+description = {}
+precautionDictionary = {}
+
+with open('ml/disease_description.csv') as csvfile:
+    csvreader = reader(csvfile)
+    fields = next(csvreader)
+
+    for row in csvreader:
+        disease, desc = row
+        description[disease] = desc
+
+with open('ml/symptom_precaution.csv') as csv_file:
+
+        csv_reader = reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            _prec={row[0]:[row[1],row[2],row[3],row[4]]}
+            precautionDictionary.update(_prec)
+
 
 @app.route('/')
 def home():
@@ -48,7 +75,9 @@ def dashboard():
 @app.route('/profile')
 @cross_origin()
 def profile():
-    return render_template('profile.html')
+    disease = session['disease']
+    disease_description = description[disease]
+    return render_template('profile.html', disease=disease, description=disease_description)
 
 @app.route('/settings', methods=['GET', 'POST'])
 @cross_origin()
@@ -134,6 +163,7 @@ def login():
                 session['email'] = form_data['email']
                 session['name'] = result['name']
                 session['userType'] = result['userType']
+                session['disease'] = result['disease']
             else:
                 response = 'failed'
         
@@ -207,34 +237,6 @@ def handle_leave_room_event(data):
     save_message(text, data['username'], data['userType'])
     socketio.emit('leave_room_announcement', data)
 
-
-
-test_data = read_csv('ml/Testing.csv', sep=',')
-test_data = test_data.drop('prognosis', axis=1)
-symptoms = list(test_data.columns)
-model = load(open('ml/model.pkl', 'rb'))
-db = cluster['aidoctor']
-
-
-fields = []
-description = {}
-precautionDictionary = {}
-
-with open('ml/disease_description.csv') as csvfile:
-    csvreader = reader(csvfile)
-    fields = next(csvreader)
-
-    for row in csvreader:
-        disease, desc = row
-        description[disease] = desc
-
-with open('ml/symptom_precaution.csv') as csv_file:
-
-        csv_reader = reader(csv_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            _prec={row[0]:[row[1],row[2],row[3],row[4]]}
-            precautionDictionary.update(_prec)
 
 
 @app.route('/webhook', methods=['POST'])

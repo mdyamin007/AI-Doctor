@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from flask_socketio import SocketIO, join_room, leave_room

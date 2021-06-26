@@ -76,7 +76,7 @@ def dashboard():
 @cross_origin()
 def profile():
     disease = session['disease']
-    disease_description = description[disease]
+    disease_description = description.get(disease)
     return render_template('profile.html', disease=disease, description=disease_description)
 
 @app.route('/settings', methods=['GET', 'POST'])

@@ -64,7 +64,7 @@ requests==2.25.1
 rfc3986==1.4.0
 rsa==4.7.2
 scikit-learn==0.24.1
-scipy==1.6.1
+
 six==1.15.0
 sklearn==0.0
 sniffio==1.2.0
